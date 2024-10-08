@@ -1,4 +1,7 @@
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
-return <h1> Hello from the Index Page </h1>
+return <div>
+  <Button> Click me </Button>
+</div>
 }
