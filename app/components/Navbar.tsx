@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import DesktopLogo from "../../public/airbnb-desktop.png"
 import MobileLogo from "../../public/airbnb-mobile.webp"
+import { UserNav } from "./UserNav";
 
 export function Navbar() {
     return (
@@ -15,6 +16,8 @@ export function Navbar() {
                 <div className="rounded-full border px-5 py-2">
                     <h1>Start with Search</h1>
                 </div>
+
+                <UserNav />
             </div>
         </nav>
     )
