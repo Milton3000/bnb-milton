@@ -1,4 +1,4 @@
-import { DropdownMenu, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { MenuIcon } from "lucide-react";
 import DefaultUser from "../../public/DefaultUser.png";
 import Image from "next/image";
@@ -13,6 +13,14 @@ export function UserNav () {
                     <Image src={DefaultUser} alt="Default User" className="w-8 h-8 rounded-full hidden lg:block" />
                 </div>
             </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[200px]">
+            <DropdownMenuItem>
+                Register
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+                Login
+            </DropdownMenuItem>
+            </DropdownMenuContent>
         </DropdownMenu>
     )
 }
