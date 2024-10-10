@@ -12,6 +12,9 @@ export function Navbar() {
 
                     <Image src={MobileLogo} alt="Mobile Logo" className="block lg:hidden w-12" />
                 </Link>
+                <div className="rounded-full border px-5 py-2">
+                    <h1>Start with Search</h1>
+                </div>
             </div>
         </nav>
     )
