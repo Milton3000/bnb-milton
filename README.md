@@ -39,3 +39,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 
 NPM RUN DEV TO START
+
+
+1. Började med basic Frontend och UI där jag använder Shadcn för komponenter. Behöver ingen npm packages för Shadcn (?).
+2. Satte upp bas komponenter, layout, folders.
+3. Installerade Kinde Auth och fixade ENV variabler + API handling för det. Inga speciella API calls för Kinde Login/Register. Bara två Links, RegisterLink och LoginLink komponenter som vi copy/pastar.
+
+Rose Color: #E21C49
