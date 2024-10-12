@@ -4,11 +4,20 @@ import Link from "next/link";
 import { categoryItems } from "../lib/categoryItems";
 import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
 export function MapFilterItems () {
     const searchParams = useSearchParams();
     const search = searchParams.get("filter");
     const pathname = usePathname();
+
+    const createQueryString = useCallback(
+        (name: string, value: string) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set(name, value);
+            return params.toString();
+        }, [searchParams]
+    )
 
     return (
         <div className="flex gap-x-10 mt-5 w-full overflow-x-scroll no-scrollbar">
