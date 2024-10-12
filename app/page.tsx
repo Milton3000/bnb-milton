@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
+import { MapFilterItems } from "./components/MapFilterItems";
 
 export default function Home() {
-return <div>
-  <Button> Click me </Button>
+return <div className="container mx-auto px-5 lg:px-10">
+<MapFilterItems />
 </div>
 }
