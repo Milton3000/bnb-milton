@@ -33,17 +33,17 @@ interface iAppProps {
     },
     {
       id: 3,
-      name: "erathhome",
+      name: "earth",
       description: "This Property is considerd a Earth Home",
-      title: "Earth Home",
+      title: "Cozy",
       imageUrl:
         "https://a0.muscache.com/pictures/d7445031-62c4-46d0-91c3-4f29f9790f7a.jpg",
     },
     {
       id: 4,
-      name: "luxe",
+      name: "luxury",
       description: "This Property is considerd Luxorious",
-      title: "Luxe",
+      title: "Luxury",
       imageUrl:
         "https://a0.muscache.com/pictures/c8e2ed05-c666-47b6-99fc-4cb6edcde6b4.jpg",
     },
@@ -75,7 +75,7 @@ interface iAppProps {
       id: 8,
       name: "tiny",
       description: "This property is considered a tiny home",
-      title: "Tiny Home",
+      title: "Compact",
       imageUrl:
         "https://a0.muscache.com/pictures/3271df99-f071-4ecf-9128-eb2d2b1f50f0.jpg",
     },
@@ -83,7 +83,7 @@ interface iAppProps {
       id: 9,
       name: "historic",
       description: "This Property is considered historic",
-      title: "Historic Home",
+      title: "Historic",
       imageUrl:
         "https://a0.muscache.com/pictures/33dd714a-7b4a-4654-aaf0-f58ea887a688.jpg",
     },
