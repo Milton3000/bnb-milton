@@ -24,22 +24,29 @@ export async function UserNav() {
             <DropdownMenuContent align="end" className="w-[200px]">
                 {user ? (
                     <>
-                    <DropdownMenuItem>
-                    <Link href="/my-homes" className="w-full">
-                    My Listings
-                    </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                    <Link href="/favorites" className="w-full">
-                    My Favorites
-                    </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                    <Link href="/reservations" className="w-full">
-                    My Reserverations
-                    </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
+                        <DropdownMenuItem>
+                        <form className="w-full">
+                            <button type="submit" className="w-full text-start">
+                            List Your Home
+                            </button>
+                        </form>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Link href="/my-homes" className="w-full">
+                                My Listings
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Link href="/favorites" className="w-full">
+                                My Favorites
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Link href="/reservations" className="w-full">
+                                My Reserverations
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             <LogoutLink className="w-full">
                                 Logout
