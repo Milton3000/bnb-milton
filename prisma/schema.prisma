@@ -9,11 +9,22 @@ generator client {
 }
 
 datasource db {
-  provider          = "postgresql"
-  url               = env("DATABASE_URL")
-  directUrl         = env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
+// Can either use this for default or the Kinde ID as the DB ID
+
+// model User {
+//   id String @id @default(uuid())
+// }
+
 model User {
-  id String @id @default(uuid())
+  id String @id @unique
+
+  email        String
+  firstName    String
+  lastName     String
+  profileImage String? // Optional
 }
