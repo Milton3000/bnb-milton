@@ -46,3 +46,16 @@ NPM RUN DEV TO START
 3. Installerade Kinde Auth och fixade ENV variabler + API handling för det. Inga speciella API calls för Kinde Login/Register. Bara två Links, RegisterLink och LoginLink komponenter som vi copy/pastar.
 
 Rose Color: #E21C49
+
+
+Database pw supabase: potatis0228
+
+npm i -D prisma
+
+-D = Development Depedency, bundle wont show up in production. Only in Dev Environment until we deploy.
+
+Sen
+
+npm i @prisma/client
+
+npx prisma init = INITALIZE THE CLIENT
