@@ -62,8 +62,9 @@ npx prisma init = INITALIZE THE CLIENT
 
 Need TWO URLS for Prisma with Supabase, check DOCS
 
-COMMAND: npx prisma db push (PUSH TO THE DATABASE)
-
+COMMAND: 
+npx prisma db push (PUSH TO THE DATABASE)
+npx prisma studio
 
 Due to hot reloading. In a dev enviroment, create a new global prisma env.
 

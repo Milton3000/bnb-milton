@@ -4,6 +4,8 @@ import DefaultUser from "../../public/DefaultUser.png";
 import Image from "next/image";
 import { RegisterLink, LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import Link from "next/link";
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 
 export async function UserNav() {
 
@@ -22,6 +24,22 @@ export async function UserNav() {
             <DropdownMenuContent align="end" className="w-[200px]">
                 {user ? (
                     <>
+                    <DropdownMenuItem>
+                    <Link href="/my-homes" className="w-full">
+                    My Listings
+                    </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                    <Link href="/favorites" className="w-full">
+                    My Favorites
+                    </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                    <Link href="/reservations" className="w-full">
+                    My Reserverations
+                    </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             <LogoutLink className="w-full">
                                 Logout
