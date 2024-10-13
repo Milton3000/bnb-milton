@@ -59,3 +59,5 @@ Sen
 npm i @prisma/client
 
 npx prisma init = INITALIZE THE CLIENT
+
+Need TWO URLS for Prisma with Supabase, check DOCS
