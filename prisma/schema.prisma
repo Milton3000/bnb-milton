@@ -28,3 +28,20 @@ model User {
   lastName     String
   profileImage String? // Optional
 }
+
+// uuid is a function that generates a unique identifier, dont have to worry about it
+model Home {
+  id String @id @default(uuid())
+
+  title String?
+  description String?
+  guests String?
+  bedrooms String?
+  bathrooms String?
+  country String?
+  photo String?
+  price Int?
+
+
+  createdAt DateTime @default(now())
+}
