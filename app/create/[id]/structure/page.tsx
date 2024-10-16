@@ -1,3 +1,5 @@
+import { SelectedCategory } from "@/app/components/SelectedCategory";
+
 export default function StructureRoute() {
     return (
 <>
@@ -9,8 +11,7 @@ export default function StructureRoute() {
 </div>
 
 <form>
-    
-
+    <SelectedCategory />
 </form>
 </>
     )
