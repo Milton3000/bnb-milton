@@ -27,21 +27,25 @@ model User {
   firstName    String
   lastName     String
   profileImage String? // Optional
+  Home         Home[]
 }
+
+// One-To-Many Relationship (User to Home) One user can have many homes.
 
 // uuid is a function that generates a unique identifier, dont have to worry about it
 model Home {
   id String @id @default(uuid())
 
-  title String?
+  title       String?
   description String?
-  guests String?
-  bedrooms String?
-  bathrooms String?
-  country String?
-  photo String?
-  price Int?
-
+  guests      String?
+  bedrooms    String?
+  bathrooms   String?
+  country     String?
+  photo       String?
+  price       Int?
 
   createdAt DateTime @default(now())
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 }
