@@ -1,5 +1,6 @@
 import { createCategoryPage } from "@/app/actions";
 import { SelectedCategory } from "@/app/components/SelectedCategory";
+import { SubmitButton } from "@/app/components/SubmitButtons";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -23,7 +24,7 @@ export default function StructureRoute({params}: {params: {id: string}}) {
                         <Button variant="secondary" size="lg" asChild>
                             <Link href="/">Cancel</Link>
                         </Button>
-                        <Button size="lg">Save</Button>
+                        <SubmitButton />
                     </div>
                 </div>
             </form>

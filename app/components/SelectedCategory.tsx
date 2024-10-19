@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 export function SelectedCategory() {
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
 
     return (
         <div className="grid grid-cols-4 gap-8 mt-10 w-3/5 mx-auto mb-36">
