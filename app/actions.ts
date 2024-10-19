@@ -32,3 +32,23 @@ export async function createHome({ userId }: { userId: string }) {
         return redirect(`/create/${data.id}/description`);
     }
 }
+
+
+export async function createCategoryPage(formData: FormData) {
+
+
+    const categoryName = formData.get("categoryName") as string;
+    const homeId = formData.get("homeId") as string;
+
+    const data = await prisma.home.update({
+        where: {
+            id: homeId,
+        },
+        data: {
+            categoryName: categoryName,
+            addedCategory: true,
+        },
+    });
+
+    return redirect(`/create/${homeId}/description`);
+}
