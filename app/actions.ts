@@ -26,5 +26,7 @@ export async function createHome({ userId }: { userId: string }) {
             },
         });
         return redirect(`/create/${data.id}/structure`);
+    } else if (!data.addedCategory && !data.addedDescription && !data.addedLocation) {
+        return redirect(`/create/${data.id}/structure`);
     }
 }
