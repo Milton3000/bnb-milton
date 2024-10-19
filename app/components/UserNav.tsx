@@ -6,11 +6,15 @@ import { RegisterLink, LoginLink, LogoutLink } from "@kinde-oss/kinde-auth-nextj
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
+import { createHome } from "../actions";
 
 export async function UserNav() {
 
     const { getUser } = getKindeServerSession();
     const user = await getUser();
+
+    // Linking this with submit / action because it expects a user id.
+    const createHomeWithId = createHome.bind(null, { userId: user?.id });
 
     return (
         <DropdownMenu>
@@ -25,11 +29,11 @@ export async function UserNav() {
                 {user ? (
                     <>
                         <DropdownMenuItem>
-                        <form className="w-full">
-                            <button type="submit" className="w-full text-start">
-                            List Your Home
-                            </button>
-                        </form>
+                            <form action={createHomeWithId} className="w-full">
+                                <button type="submit" className="w-full text-start">
+                                    List Your Home
+                                </button>
+                            </form>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <Link href="/my-homes" className="w-full">
