@@ -36,7 +36,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
 
-
+[shadcn: label, input, textarea, select]
 
 NPM RUN DEV TO START
 
@@ -64,6 +64,7 @@ Need TWO URLS for Prisma with Supabase, check DOCS
 
 COMMAND: 
 npx prisma db push (PUSH TO THE DATABASE)
+npx prisma generate
 npx prisma studio
 
 Due to hot reloading. In a dev enviroment, create a new global prisma env.
