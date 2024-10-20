@@ -1,3 +1,4 @@
+import { createDescriptionPage } from "@/app/actions";
 import { BottomBar } from "@/app/components/BottomBar";
 import { Counter } from "@/app/components/Counter";
 import { Card, CardHeader } from "@/components/ui/card";
@@ -14,7 +15,7 @@ export default function DescriptionPage({params}: {params: {id: string}}) {
                 </h2>
             </div>
 
-            <form>
+            <form action={createDescriptionPage}>
                 <input type="hidden" name="homeId" value={params.id} />
                 <div className="mx-auto w-3/5 mt-10 flex flex-col gap-y-5 mb-36">
                     <div className="flex flex-col gap-y-2">
@@ -26,7 +27,7 @@ export default function DescriptionPage({params}: {params: {id: string}}) {
                         <Textarea name="description" required placeholder="Describe your home" />
                     </div>
                     <div className="flex flex-col gap-y-2">
-                        <Label> Price </Label>
+                        <Label> Price (USD) </Label>
                         <Input name="price" type="number" required placeholder="Price per night" min={10} />
                     </div>
                     <div className="flex flex-col gap-y-2">

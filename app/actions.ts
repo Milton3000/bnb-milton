@@ -85,6 +85,9 @@ export async function createDescriptionPage(formData: FormData) {
                 bathrooms: bathroomNumber,
                 guests: guestNumber,
                 photo: imageData?.path,
+                addedDescription: true,
             },
         });
+
+        return redirect(`/create/${homeId}/address`);
 }
