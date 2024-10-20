@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import prisma from "./lib/db"
+import { supabase } from "./lib/supabase";
 
 // Server environment "use server"
 // File for the server actions, from Next.Js 13.4
@@ -59,8 +60,31 @@ export async function createDescriptionPage(formData: FormData) {
     const description = formData.get("description") as string;
     const price = formData.get("price");
     const image = formData.get("image") as File;
+    const homeId = formData.get("homeId") as string;
 
     const guestNumber = formData.get("guests") as string;
     const roomNumber = formData.get("room") as string;
     const bathroomNumber = formData.get("bathroom") as string;
+
+    const { data: imageData } = await supabase.storage.from
+    ("images").upload(`${image.name}-${new Date()}`, image,
+        {
+            cacheControl: "2592000",
+            contentType: "image/png",
+        });
+
+        const data = await prisma.home.update({
+            where: {
+                id: homeId,
+            },
+            data: {
+                title: title,
+                description: description,
+                price: Number(price),
+                bedrooms: roomNumber,
+                bathrooms: bathroomNumber,
+                guests: guestNumber,
+                photo: imageData?.path,
+            },
+        });
 }
