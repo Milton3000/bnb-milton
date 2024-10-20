@@ -1,3 +1,4 @@
+import { BottomBar } from "@/app/components/BottomBar";
 import { Counter } from "@/app/components/Counter";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -58,6 +59,8 @@ export default function DescriptionPage() {
                         </CardHeader>
                     </Card>
                 </div>
+
+                <BottomBar />
             </form>
 
         </>
