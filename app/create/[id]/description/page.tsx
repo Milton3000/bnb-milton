@@ -41,6 +41,20 @@ export default function DescriptionPage() {
                         </div>
                         <Counter />
                         </div>
+                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col">
+                            <h3 className="underline font-medium">Rooms</h3>
+                            <p className="text-muted-foreground text-sm"> How many rooms?</p>
+                        </div>
+                        <Counter />
+                        </div>
+                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col">
+                            <h3 className="underline font-medium">Bathrooms</h3>
+                            <p className="text-muted-foreground text-sm"> How many bathrooms?</p>
+                        </div>
+                        <Counter />
+                        </div>
                         </CardHeader>
                     </Card>
                 </div>
