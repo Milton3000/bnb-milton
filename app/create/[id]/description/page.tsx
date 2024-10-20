@@ -15,11 +15,19 @@ export default function DescriptionPage() {
                 <div className="mx-auto w-3/5 mt-10 flex flex-col gap-y-5 mb-36">
                     <div className="flex flex-col gap-y-2">
                         <Label>Title</Label>
-                        <Input name="title" required placeholder="Short and simple..." />
+                        <Input name="title" type="text" required placeholder="Short and simple..." />
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <Label>Description</Label>
                         <Textarea name="description" required placeholder="Describe your home" />
+                    </div>
+                    <div className="flex flex-col gap-y-2">
+                        <Label> Price </Label>
+                        <Input name="price" type="number" required placeholder="Price per night" min={10} />
+                    </div>
+                    <div className="flex flex-col gap-y-2">
+                        <Label> Image </Label>
+                        <Input name="image" type="file" required placeholder="Upload an image" />
                     </div>
                 </div>
             </form>
