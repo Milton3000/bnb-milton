@@ -1,3 +1,5 @@
+"use client";
+
 import { BottomBar } from "@/app/components/BottomBar";
 import { useCountries } from "@/app/lib/getCountries";
 import {
@@ -11,14 +13,16 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import dynamic from "next/dynamic";
+import { useState } from "react";
 
 export default function AddressRoute() {
   const { getAllCountries } = useCountries();
+  const [locationValue, setLocationValue] = useState("");
 
-const LazyMap = dynamic(() => import("@/app/components/Map"), { ssr: false,
-    loading: () => <Skeleton className="h-[50vh] w-full" />
-
-});
+  const LazyMap = dynamic(() => import("@/app/components/Map"), {
+    ssr: false,
+    loading: () => <Skeleton className="h-[50vh] w-full" />,
+  });
 
   return (
     <>
@@ -31,7 +35,7 @@ const LazyMap = dynamic(() => import("@/app/components/Map"), { ssr: false,
       <form>
         <div className="w-3/5 mx-auto mb-36">
           <div className="mb-5">
-            <Select required>
+            <Select required onValueChange={(value) => setLocationValue(value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a Country" />
               </SelectTrigger>
@@ -47,11 +51,10 @@ const LazyMap = dynamic(() => import("@/app/components/Map"), { ssr: false,
               </SelectContent>
             </Select>
           </div>
-          <LazyMap />
+          <LazyMap locationValue={locationValue} />
         </div>
 
-<BottomBar />
-
+        <BottomBar />
       </form>
     </>
   );
