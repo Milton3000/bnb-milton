@@ -14,6 +14,7 @@ async function getData() {
       id: true,
       price: true,
       description: true,
+      country: true,
     },
   });
   return data;
@@ -29,7 +30,7 @@ export default async function Home() {
 
       <div>
         {data.map((item) => (
-            <ListingCard key={item.id}/>
+            <ListingCard key={item.id} description={item.description as string} imagePath={item.photo as string} location={item.country as string} price={item.price as number} />
         ))}
       </div>
     </div>
