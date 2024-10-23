@@ -28,7 +28,7 @@ export default async function Home() {
       <MapFilterItems />
       
 
-      <div>
+      <div className="grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
         {data.map((item) => (
             <ListingCard key={item.id} description={item.description as string} imagePath={item.photo as string} location={item.country as string} price={item.price as number} />
         ))}
