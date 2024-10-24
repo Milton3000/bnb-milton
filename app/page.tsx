@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { ListingCard } from "./components/ListingCard";
 import { MapFilterItems } from "./components/MapFilterItems";
 import prisma from "./lib/db";
+import { NoItems } from "./components/NoItem";
 
 async function getData({
   searchParams,
@@ -57,6 +58,10 @@ async function ShowItems({
   const data = await getData({searchParams: searchParams});
 
   return (
+<>
+{data.length === 0 ? (
+  <NoItems />
+  ): (
     <div className="grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
     {data.map((item) => (
       <ListingCard
@@ -68,5 +73,7 @@ async function ShowItems({
       />
     ))}
   </div>
+  )}
+</>
   )
 }
