@@ -2,12 +2,19 @@ import { ListingCard } from "./components/ListingCard";
 import { MapFilterItems } from "./components/MapFilterItems";
 import prisma from "./lib/db";
 
-async function getData() {
+async function getData({
+  searchParams,
+}: {
+  searchParams?: {
+    filter?: string;
+  };
+}) {
   const data = await prisma.home.findMany({
     where: {
       addedCategory: true,
       addedLocation: true,
       addedDescription: true,
+      categoryName: searchParams?.filter ?? undefined,
     },
     select: {
       photo: true,
@@ -20,17 +27,28 @@ async function getData() {
   return data;
 }
 
-export default async function Home() {
-    const data = await getData();
+export default async function Home({
+  searchParams,
+}: {
+  searchParams?: {
+    filter?: string;
+  };
+}) {
+  const data = await getData({searchParams: searchParams});
 
   return (
     <div className="container mx-auto px-5 lg:px-10">
       <MapFilterItems />
-      
 
       <div className="grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
         {data.map((item) => (
-            <ListingCard key={item.id} description={item.description as string} imagePath={item.photo as string} location={item.country as string} price={item.price as number} />
+          <ListingCard
+            key={item.id}
+            description={item.description as string}
+            imagePath={item.photo as string}
+            location={item.country as string}
+            price={item.price as number}
+          />
         ))}
       </div>
     </div>
