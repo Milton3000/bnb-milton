@@ -36,13 +36,12 @@ export default function Home({
     filter?: string;
   };
 }) {
-
   return (
     <div className="container mx-auto px-5 lg:px-10">
       <MapFilterItems />
 
       <Suspense key={searchParams?.filter} fallback={<p> Loading ... </p>}>
-      <ShowItems searchParams={searchParams}/>
+        <ShowItems searchParams={searchParams} />
       </Suspense>
     </div>
   );
@@ -55,25 +54,25 @@ async function ShowItems({
     filter?: string;
   };
 }) {
-  const data = await getData({searchParams: searchParams});
+  const data = await getData({ searchParams: searchParams });
 
   return (
-<>
-{data.length === 0 ? (
-  <NoItems />
-  ): (
-    <div className="grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
-    {data.map((item) => (
-      <ListingCard
-        key={item.id}
-        description={item.description as string}
-        imagePath={item.photo as string}
-        location={item.country as string}
-        price={item.price as number}
-      />
-    ))}
-  </div>
-  )}
-</>
-  )
+    <>
+      {data.length === 0 ? (
+        <NoItems />
+      ) : (
+        <div className="grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
+          {data.map((item) => (
+            <ListingCard
+              key={item.id}
+              description={item.description as string}
+              imagePath={item.photo as string}
+              location={item.country as string}
+              price={item.price as number}
+            />
+          ))}
+        </div>
+      )}
+    </>
+  );
 }
