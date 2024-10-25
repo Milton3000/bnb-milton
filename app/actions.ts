@@ -124,3 +124,18 @@ export async function createLocation(formData: FormData) {
 
   return redirect("/");
 }
+
+
+// Server action för add-to-favorites
+
+export async function addToFavorite(formData: FormData) {
+const homeId = formData.get("homeId") as string;
+const userId = formData.get("userId") as string;
+
+const data = await prisma.favorite.create({
+  data: {
+    id: homeId,
+    userId: userId,
+  },
+});
+}

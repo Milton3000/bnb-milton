@@ -82,6 +82,7 @@ async function ShowItems({
               userId={user?.id}
               favoriteId={item.Favorite[0]?.id}
               isInFavoriteList={item.Favorite.length > 0 ? true : false}
+              homeId={item.id}
             />
           ))}
         </div>
