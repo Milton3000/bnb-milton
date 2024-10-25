@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { Heart, Loader2 } from "lucide-react";
 // If we use State in any form, we have to mark it as "use client" with Next.js
 import { useFormStatus } from "react-dom"
 
@@ -20,5 +20,20 @@ export function SubmitButton() {
                 </Button>
             )}
         </>
+    )
+}
+
+export function AddToFavoriteButton() {
+    const { pending } = useFormStatus()
+    return (
+<>
+{pending ? (
+<div></div>
+): (
+    <Button variant="outline" size="icon" className="bg-primary" type="submit">
+        <Heart className="w-4 h-4" />
+    </Button>
+)}
+</>
     )
 }

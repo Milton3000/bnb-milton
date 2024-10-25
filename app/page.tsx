@@ -80,6 +80,8 @@ async function ShowItems({
               location={item.country as string}
               price={item.price as number}
               userId={user?.id}
+              favoriteId={item.Favorite[0]?.id}
+              isInFavoriteList={item.Favorite.length > 0 ? true : false}
             />
           ))}
         </div>

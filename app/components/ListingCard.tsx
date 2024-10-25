@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCountries } from "../lib/getCountries";
-import { Heart } from "lucide-react";
+import { AddToFavoriteButton } from "./SubmitButtons";
 
 interface iAppProps {
   imagePath: string;
@@ -9,6 +9,8 @@ interface iAppProps {
   location: string;
   price: number;
   userId: string | undefined;
+  isInFavoriteList: boolean;
+  favoriteId: string;
 }
 
 export function ListingCard({
@@ -34,11 +36,11 @@ export function ListingCard({
         />
       {userId && (
         <div className="z-10 absolute top-2 right-2">
-            <Heart />
+          <AddToFavoriteButton />
         </div>
       )}
-
       </div>
+
       <Link href="/" className="mt-2">
       <h3 className="font-medium text-base">
     {country?.flag} {country?.label} / {country?.region}
