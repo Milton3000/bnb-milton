@@ -28,6 +28,7 @@ model User {
   lastName     String
   profileImage String? // Optional
   Home         Home[]
+  Favorite     Favorite[]
 }
 
 // One-To-Many Relationship (User to Home) One user can have many homes.
@@ -36,21 +37,35 @@ model User {
 model Home {
   id String @id @default(uuid())
 
-  title       String?
-  description String?
-  guests      String?
-  bedrooms    String?
-  bathrooms   String?
-  country     String?
-  photo       String?
-  price       Int?
+  title        String?
+  description  String?
+  guests       String?
+  bedrooms     String?
+  bathrooms    String?
+  country      String?
+  photo        String?
+  price        Int?
   categoryName String?
+  Favorite     Favorite[]
 
-  addedCategory Boolean @default(false)
+  addedCategory    Boolean @default(false)
   addedDescription Boolean @default(false)
-  addedLocation Boolean @default(false)
+  addedLocation    Boolean @default(false)
 
   createdAt DateTime @default(now())
   User      User?    @relation(fields: [userId], references: [id])
   userId    String?
+}
+
+// Kan skippa senare
+model Favorite {
+  id String @id @default(uuid())
+
+  User   User?   @relation(fields: [userId], references: [id])
+  userId String?
+  Home   Home?   @relation(fields: [homeId], references: [id])
+  homeId String?
+
+
+  createdAt DateTime @default(now())
 }
