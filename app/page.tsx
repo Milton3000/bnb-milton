@@ -7,9 +7,9 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
 async function getData({
   searchParams,
-  userId
+  userId,
 }: {
-  userId: string | undefined,
+  userId: string | undefined;
   searchParams?: {
     filter?: string;
   };
@@ -30,8 +30,8 @@ async function getData({
       Favorite: {
         where: {
           userId: userId ?? undefined,
-        }
-      }
+        },
+      },
     },
   });
   return data;
@@ -79,6 +79,7 @@ async function ShowItems({
               imagePath={item.photo as string}
               location={item.country as string}
               price={item.price as number}
+              userId={user?.id}
             />
           ))}
         </div>

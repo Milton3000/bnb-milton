@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCountries } from "../lib/getCountries";
+import { Heart } from "lucide-react";
 
 interface iAppProps {
   imagePath: string;
   description: string;
   location: string;
   price: number;
+  userId: string | undefined;
 }
 
 export function ListingCard({
@@ -14,6 +16,7 @@ export function ListingCard({
   imagePath,
   location,
   price,
+  userId,
 }: iAppProps) {
 
     const {getCountryByValue} = useCountries();
@@ -29,6 +32,12 @@ export function ListingCard({
           fill
           className="rounded-lg height-full object-cover"
         />
+      {userId && (
+        <div className="z-10 absolute top-2 right-2">
+            <Heart />
+        </div>
+      )}
+
       </div>
       <Link href="/" className="mt-2">
       <h3 className="font-medium text-base">
