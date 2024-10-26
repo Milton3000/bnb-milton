@@ -69,7 +69,7 @@ async function ShowItems({
   return (
     <>
       {data.length === 0 ? (
-        <NoItems />
+        <NoItems description="Please check other categories or create your own listing." title="No listings found for this category."/>
       ) : (
         <div className="grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
           {data.map((item) => (
