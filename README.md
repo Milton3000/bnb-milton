@@ -73,3 +73,7 @@ Due to hot reloading. In a dev enviroment, create a new global prisma env.
 db.ts:
 
 If we are NOT in a prod env. set our prisma client to a Global Prisma. If we are in a prod env, use this normal new Prisma Client.
+
+
+
+[id] folder = dynamic route, get the id through the pathname.
