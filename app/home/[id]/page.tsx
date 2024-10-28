@@ -4,6 +4,7 @@ import DefaultUser from "../../../public/DefaultUser.png";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { CategoryShowcase } from "@/app/components/CategoryShowcase";
+import { HomeMap } from "@/app/components/HomeMap";
 
 async function getData(homeId: string) {
   const data = await prisma.home.findUnique({
@@ -85,7 +86,8 @@ export default async function HomeRoute({
           <Separator className="my-7" />
           <p className="text-muted-foreground">{data?.description}</p>
           <Separator className="my-7" />
-          
+
+          <HomeMap locationValue={country?.value as string} />
         </div>
       </div>
     </div>
