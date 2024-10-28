@@ -2,6 +2,7 @@ import prisma from "@/app/lib/db";
 import { useCountries } from "@/app/lib/getCountries";
 import DefaultUser from "../../../public/DefaultUser.png";
 import Image from "next/image";
+import { Separator } from "@/components/ui/separator";
 
 async function getData(homeId: string) {
   const data = await prisma.home.findUnique({
@@ -21,6 +22,8 @@ async function getData(homeId: string) {
       User: {
         select: {
           profileImage: true,
+          firstName: true,
+          lastName: true,
         },
       },
     },
@@ -67,7 +70,16 @@ export default async function HomeRoute({
               alt="Profile Image of User" width={65} height={65}
               className="w-15 h-15 rounded-full"
             />
+            <div className="flex flex-col ml-4">
+                <h3 className="font-medium">
+                 {data?.User?.firstName} {data?.User?.lastName}
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                    Host since 2015
+                </p>
+            </div>
           </div>
+          <Separator className="my-7"/>
         </div>
       </div>
     </div>
