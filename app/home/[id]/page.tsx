@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import { CategoryShowcase } from "@/app/components/CategoryShowcase";
 import { HomeMap } from "@/app/components/HomeMap";
+import { SelectCalendar } from "@/app/components/SelectCalendar";
 
 async function getData(homeId: string) {
   const data = await prisma.home.findUnique({
@@ -89,6 +90,8 @@ export default async function HomeRoute({
 
           <HomeMap locationValue={country?.value as string} />
         </div>
+
+        <SelectCalendar />
       </div>
     </div>
   );
