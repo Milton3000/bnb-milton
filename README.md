@@ -37,6 +37,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 
 [shadcn: label, input, textarea, select, separator]
+[npm install react-date-range] - Date för Reservations
 
 NPM RUN DEV TO START
 
