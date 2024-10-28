@@ -22,6 +22,8 @@ export function SelectCalendar() {
     rangeColors={["#F97316"]}
     ranges={state}
     onChange={(item) => setState([item.selection] as any)}
+    minDate={new Date()}
+    direction="vertical"
     />
    );
 }
