@@ -3,6 +3,7 @@ import { useCountries } from "@/app/lib/getCountries";
 import DefaultUser from "../../../public/DefaultUser.png";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
+import { CategoryShowcase } from "@/app/components/CategoryShowcase";
 
 async function getData(homeId: string) {
   const data = await prisma.home.findUnique({
@@ -43,7 +44,7 @@ export default async function HomeRoute({
   const country = getCountryByValue(data?.country as string);
 
   return (
-    <div className="w-[75%] mx-auto mt-10">
+    <div className="w-[75%] mx-auto mt-10 mb-12">
       <h1 className="font-medium text-2xl mb-5">{data?.title}</h1>
       <div className="relative h-[550px]">
         <Image
@@ -67,19 +68,24 @@ export default async function HomeRoute({
           <div className="flex items-center mt-6">
             <Image
               src={data?.User?.profileImage ?? DefaultUser}
-              alt="Profile Image of User" width={65} height={65}
+              alt="Profile Image of User"
+              width={65}
+              height={65}
               className="w-15 h-15 rounded-full"
             />
             <div className="flex flex-col ml-4">
-                <h3 className="font-medium">
-                 {data?.User?.firstName} {data?.User?.lastName}
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                    Host since 2015
-                </p>
+              <h3 className="font-medium">
+                {data?.User?.firstName} {data?.User?.lastName}
+              </h3>
+              <p className="text-sm text-muted-foreground">Host since 2015</p>
             </div>
           </div>
-          <Separator className="my-7"/>
+          <Separator className="my-7" />
+          <CategoryShowcase categoryName={data?.categoryName as string} />
+          <Separator className="my-7" />
+          <p className="text-muted-foreground">{data?.description}</p>
+          <Separator className="my-7" />
+          
         </div>
       </div>
     </div>
