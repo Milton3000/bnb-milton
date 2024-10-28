@@ -1,4 +1,6 @@
 import prisma from "@/app/lib/db";
+import { useCountries } from "@/app/lib/getCountries";
+import DefaultUser from "../../../public/DefaultUser.png";
 import Image from "next/image";
 
 async function getData(homeId: string) {
@@ -15,6 +17,12 @@ async function getData(homeId: string) {
       title: true,
       categoryName: true,
       price: true,
+      country: true,
+      User: {
+        select: {
+          profileImage: true,
+        },
+      },
     },
   });
 
@@ -28,16 +36,39 @@ export default async function HomeRoute({
   params: { id: string };
 }) {
   const data = await getData(params.id);
+  const { getCountryByValue } = useCountries();
+  const country = getCountryByValue(data?.country as string);
+
   return (
     <div className="w-[75%] mx-auto mt-10">
       <h1 className="font-medium text-2xl mb-5">{data?.title}</h1>
       <div className="relative h-[550px]">
-    <Image className="rounded-lg h-full object-cover w-full"
-    alt="Image of Home"
-    src={`https://sctnymoriaxapkrjnbfc.supabase.co/storage/v1/object/public/images/${data?.photo}`}
-    fill
-    // Can use fill property instead of setting width + height, can only do that with a parent element which has a relative element.
-    />
+        <Image
+          className="rounded-lg h-full object-cover w-full"
+          alt="Image of Home"
+          src={`https://sctnymoriaxapkrjnbfc.supabase.co/storage/v1/object/public/images/${data?.photo}`}
+          fill
+          // Can use fill property instead of setting width + height, can only do that with a parent element which has a relative element.
+        />
+      </div>
+      <div className="flex justify-between gap-x-24 mt-8">
+        <div className="w-2/3">
+          <h3 className="text-xl font-medium">
+            {country?.flag} {country?.label} / {country?.region}
+          </h3>
+          <div className="flex gap-x-2 text-muted-foreground">
+            <p> {data?.guests} Guests</p> - <p> {data?.bedrooms} Bedrooms</p> -{" "}
+            <p> {data?.bathrooms} Bathrooms</p> -
+          </div>
+
+          <div className="flex items-center mt-6">
+            <Image
+              src={data?.User?.profileImage ?? DefaultUser}
+              alt="Profile Image of User" width={65} height={65}
+              className="w-15 h-15 rounded-full"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
