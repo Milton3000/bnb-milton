@@ -126,37 +126,56 @@ export async function createLocation(formData: FormData) {
   return redirect("/");
 }
 
-
 // Server action för add-to-favorites
 
 export async function addToFavorite(formData: FormData) {
-const homeId = formData.get("homeId") as string;
-const userId = formData.get("userId") as string;
-const pathName = formData.get("pathName") as string;
+  const homeId = formData.get("homeId") as string;
+  const userId = formData.get("userId") as string;
+  const pathName = formData.get("pathName") as string;
 
-const data = await prisma.favorite.create({
-  data: {
-    homeId: homeId,
-    userId: userId,
-  },
-});
+  const data = await prisma.favorite.create({
+    data: {
+      homeId: homeId,
+      userId: userId,
+    },
+  });
 
-revalidatePath(pathName);
+  revalidatePath(pathName);
 }
 
 // Server action för delete-from-favorites
 
 export async function DeleteFromFavorite(formData: FormData) {
-const favoriteId = formData.get("favoriteId") as string;
-const userId = formData.get("userId") as string;
-const pathName = formData.get("pathName") as string;
+  const favoriteId = formData.get("favoriteId") as string;
+  const userId = formData.get("userId") as string;
+  const pathName = formData.get("pathName") as string;
 
-const data = await prisma.favorite.delete({
-  where: {
-    id: favoriteId,
-    userId: userId,
-  },
-});
+  const data = await prisma.favorite.delete({
+    where: {
+      id: favoriteId,
+      userId: userId,
+    },
+  });
 
-revalidatePath(pathName);
+  revalidatePath(pathName);
+}
+
+// server action för model
+
+export async function createBooking(formData: FormData) {
+  const userId = formData.get("userId") as string;
+  const homeId = formData.get("homeId") as string;
+  const startDate = formData.get("startDate") as string;
+  const endDate = formData.get("endDate") as string;
+
+  const data = await prisma.booking.create({
+    data: {
+      userId: userId,
+      homeId: homeId,
+      endDate: endDate,
+      startDate: startDate,
+    },
+  });
+
+  return redirect("(/");
 }
