@@ -177,5 +177,5 @@ export async function createBooking(formData: FormData) {
     },
   });
 
-  return redirect("(/");
+  return redirect("/");
 }

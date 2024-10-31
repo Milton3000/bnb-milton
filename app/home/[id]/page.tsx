@@ -9,6 +9,7 @@ import { SelectCalendar } from "@/app/components/SelectCalendar";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { createBooking } from "@/app/actions";
 
 async function getData(homeId: string) {
   const data = await prisma.home.findUnique({
@@ -96,17 +97,19 @@ export default async function HomeRoute({
           <HomeMap locationValue={country?.value as string} />
         </div>
 
-        <form>
+        <form action={createBooking}>
           <input type="hidden" name="homeId" value={params.id} />
           <input type="hidden" name="userId" value={user?.id} />
 
           <SelectCalendar />
         {/* vill bara ha users som är authenticated göra en bokning  */}
           {user?.id ? (
-            <div></div>
+            <Button className="w-full" type="submit">
+              Book this home!
+            </Button>
           ) : (
             <Button className="w-full" asChild>
-              <Link href="/api/auth/login">Book this home</Link>
+              <Link href="/api/auth/login">Make a reservation</Link>
             </Button>
           )}
         </form>
