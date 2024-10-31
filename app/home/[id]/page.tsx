@@ -26,6 +26,11 @@ async function getData(homeId: string) {
       categoryName: true,
       price: true,
       country: true,
+      Booking: {
+        where: {
+          homeId: homeId,
+        },
+      },
       User: {
         select: {
           profileImage: true,
@@ -101,8 +106,8 @@ export default async function HomeRoute({
           <input type="hidden" name="homeId" value={params.id} />
           <input type="hidden" name="userId" value={user?.id} />
 
-          <SelectCalendar />
-        {/* vill bara ha users som är authenticated göra en bokning  */}
+          <SelectCalendar booking={data?.Booking} />
+          {/* vill bara ha users som är authenticated göra en bokning  */}
           {user?.id ? (
             <Button className="w-full" type="submit">
               Book this home!
