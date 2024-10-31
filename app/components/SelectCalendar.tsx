@@ -15,14 +15,26 @@ export function SelectCalendar() {
     },
   ]);
   return (
-    <DateRange
-      date={new Date()}
-      showDateDisplay={false}
-      rangeColors={["#F97316"]}
-      ranges={state}
-      onChange={(item) => setState([item.selection] as any)}
-      minDate={new Date()}
-      direction="vertical"
-    />
+    <>
+      <input
+        type="hidden"
+        name="startDate"
+        value={state[0].startDate.toISOString()}
+      />
+      <input
+        type="hidden"
+        name="endDate"
+        value={state[0].endDate.toISOString()}
+      />
+      <DateRange
+        date={new Date()}
+        showDateDisplay={false}
+        rangeColors={["#F97316"]}
+        ranges={state}
+        onChange={(item) => setState([item.selection] as any)}
+        minDate={new Date()}
+        direction="vertical"
+      />
+    </>
   );
 }
