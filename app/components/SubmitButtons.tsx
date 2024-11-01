@@ -65,3 +65,21 @@ export function DeleteFromFavoriteButton() {
     </>
   );
 }
+
+export function BookingSubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <>
+    {pending ? (
+      <Button className="w-full" disabled>
+              <Loader2 className="w-4 h-4 animate-spin mr-2" /> 
+              Booking ...
+            </Button>
+    ): (
+      <Button className="w-full" type="submit">
+              Book this home!
+            </Button>
+    )}
+    </>
+  )
+}

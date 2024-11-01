@@ -10,6 +10,7 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { createBooking } from "@/app/actions";
+import { BookingSubmitButton } from "@/app/components/SubmitButtons";
 
 async function getData(homeId: string) {
   const data = await prisma.home.findUnique({
@@ -109,9 +110,7 @@ export default async function HomeRoute({
           <SelectCalendar booking={data?.Booking} />
           {/* vill bara ha users som är authenticated göra en bokning  */}
           {user?.id ? (
-            <Button className="w-full" type="submit">
-              Book this home!
-            </Button>
+            <BookingSubmitButton />
           ) : (
             <Button className="w-full" asChild>
               <Link href="/api/auth/login">Make a reservation</Link>
