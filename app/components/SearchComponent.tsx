@@ -24,9 +24,10 @@ import { HomeMap } from "./HomeMap";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
 import { Counter } from "./Counter";
+import { SubmitButton } from "./SubmitButtons";
 
 export function SearchModalComponent() {
-  const [step, useStep] = useState(1);
+  const [step, setStep] = useState(1);
   const [locationValue, setLocationValue] = useState("");
   const { getAllCountries } = useCountries();
 
@@ -38,7 +39,7 @@ export function SearchModalComponent() {
         </Button>
       );
     } else if (step === 2) {
-      return <CreationSubmit />;
+      return <SubmitButton />;
     }
   }
   return (
