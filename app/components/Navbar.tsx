@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import dreambnb from "../../public/dreambnb.png"
 import { UserNav } from "./UserNav";
+import { SearchModalComponent } from "./SearchComponent";
 
 export function Navbar() {
     return (
@@ -12,10 +13,7 @@ export function Navbar() {
 
                     <Image src={dreambnb} alt="Mobile Logo" className="block lg:hidden w-12" />
                 </Link>
-                <div className="rounded-full border px-5 py-2">
-                    <h1>Start with Search</h1>
-                </div>
-
+            <SearchModalComponent />
                 <UserNav />
             </div>
         </nav>
