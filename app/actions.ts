@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
 import { redirect } from "next/navigation";
 import prisma from "./lib/db";
 import { supabase } from "./lib/supabase";
 import { revalidatePath } from "next/cache";
+import { differenceInDays } from "date-fns";
 
 // Server environment "use server"
 // File for the server actions, from Next.Js 13.4
 
-// Check for existing homes etc.
+// Check for existing homes and create if none exists.
 export async function createHome({ userId }: { userId: string }) {
   const data = await prisma.home.findFirst({
     where: {
@@ -19,7 +21,7 @@ export async function createHome({ userId }: { userId: string }) {
     },
   });
 
-  // If the data has zero homes in the db, then create a new home.
+  // If no home exists, create a new one.
   if (data === null) {
     const data = await prisma.home.create({
       data: {
@@ -126,8 +128,7 @@ export async function createLocation(formData: FormData) {
   return redirect("/");
 }
 
-// Server action för add-to-favorites
-
+// Add to favorites
 export async function addToFavorite(formData: FormData) {
   const homeId = formData.get("homeId") as string;
   const userId = formData.get("userId") as string;
@@ -143,9 +144,8 @@ export async function addToFavorite(formData: FormData) {
   revalidatePath(pathName);
 }
 
-// Server action för delete-from-favorites
-
-export async function DeleteFromFavorite(formData: FormData) {
+// Delete from favorites
+export async function deleteFromFavorite(formData: FormData) {
   const favoriteId = formData.get("favoriteId") as string;
   const userId = formData.get("userId") as string;
   const pathName = formData.get("pathName") as string;
@@ -160,22 +160,115 @@ export async function DeleteFromFavorite(formData: FormData) {
   revalidatePath(pathName);
 }
 
-// server action för model
-
+// Create booking with totalPrice calculation
 export async function createBooking(formData: FormData) {
   const userId = formData.get("userId") as string;
   const homeId = formData.get("homeId") as string;
-  const startDate = formData.get("startDate") as string;
-  const endDate = formData.get("endDate") as string;
+  const startDate = new Date(formData.get("startDate") as string);
+  const endDate = new Date(formData.get("endDate") as string);
 
-  const data = await prisma.booking.create({
+  // Fetch home to get price per night
+  const home = await prisma.home.findUnique({
+    where: { id: homeId },
+    select: { price: true },
+  });
+
+  if (!home || !home.price) {
+    throw new Error("Property not found or price is unavailable.");
+  }
+
+  const duration = differenceInDays(endDate, startDate);
+  const totalPrice = home.price * duration;
+
+  const booking = await prisma.booking.create({
     data: {
-      userId: userId,
-      homeId: homeId,
-      endDate: endDate,
-      startDate: startDate,
+      userId,
+      homeId,
+      startDate,
+      endDate,
+      totalPrice,
+      status: "pending",
     },
   });
 
-  return redirect("/");
+  return redirect("/bookings");
+}
+
+// Update property (restricted to owner or admin)
+export async function updateProperty(
+  homeId: string,
+  userId: string | undefined,
+  data: { title: string; description: string; price: number }
+) {
+  if (!userId) {
+    throw new Error("User ID is required to update a property.");
+  }
+
+  const home = await prisma.home.findUnique({ where: { id: homeId } });
+
+  if (!home || (home.userId !== userId && !(await isAdmin(userId)))) {
+    throw new Error("Not authorized to update this property.");
+  }
+
+  return prisma.home.update({
+    where: { id: homeId },
+    data,
+  });
+}
+
+// Delete property (restricted to owner or admin)
+export async function deleteProperty(homeId: string) {
+  try {
+    // check homeId is passed correctly
+    if (!homeId) throw new Error("Home ID is required to delete a property.");
+
+    await prisma.home.delete({
+      where: { id: homeId },
+    });
+  } catch (error) {
+    console.error("Failed to delete property:", error);
+    throw error;
+  }
+}
+
+// Approve or reject booking (restricted to listing owner)
+export async function approveOrRejectBooking(
+  bookingId: string,
+  action: "accept" | "reject"
+) {
+  return await prisma.booking.update({
+    where: { id: bookingId },
+    data: {
+      status: action === "accept" ? "accepted" : "rejected",
+    },
+  });
+}
+
+// IS USER ADMIN
+export async function isAdmin(userId: string | undefined) {
+  if (!userId) {
+    throw new Error("User ID is required to check admin status.");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { isAdmin: true },
+  });
+
+  return user?.isAdmin ?? false;
+}
+
+// CANCEL BOOKING
+
+export async function cancelBooking(bookingId: string) {
+  if (!bookingId) throw new Error("Booking ID is required.");
+
+  try {
+    await prisma.booking.delete({
+      where: { id: bookingId },
+    });
+  } catch (error) {
+    console.error("Failed to cancel booking:", error);
+    throw error;
+  }
 }

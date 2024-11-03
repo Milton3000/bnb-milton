@@ -1,19 +1,24 @@
+"use client"; // This component uses client-side functionality
+
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCountries } from "../lib/getCountries";
 import { AddToFavoriteButton, DeleteFromFavoriteButton } from "./SubmitButtons";
-import { addToFavorite, DeleteFromFavorite } from "../actions";
+import { addToFavorite, deleteFromFavorite, deleteProperty } from "../actions";
+import { Button } from "@/components/ui/button";
 
 interface iAppProps {
   imagePath: string;
   description: string;
   location: string;
   price: number;
-  userId: string | undefined;
+  userId: string;
   isInFavoriteList: boolean;
   favoriteId: string;
-  homeId: string
-  pathName: string
+  homeId: string;
+  pathName: string;
+  showActions?: boolean;
 }
 
 export function ListingCard({
@@ -26,11 +31,21 @@ export function ListingCard({
   homeId,
   isInFavoriteList,
   pathName,
+  showActions = false,
 }: iAppProps) {
   const { getCountryByValue } = useCountries();
   const country = getCountryByValue(location);
+  const router = useRouter();
 
-  // console.log(imagePath)
+  const handleDelete = async () => {
+    try {
+      await deleteProperty(homeId);
+      router.refresh();
+    } catch (error) {
+      console.error("Failed to delete property:", error);
+    }
+  };
+
   return (
     <div className="flex flex-col">
       <div className="relative h-72">
@@ -43,7 +58,7 @@ export function ListingCard({
         {userId && (
           <div className="z-10 absolute top-2 right-2">
             {isInFavoriteList ? (
-              <form action={DeleteFromFavorite}>
+              <form action={deleteFromFavorite}>
                 <input type="hidden" name="favoriteId" value={favoriteId} />
                 <input type="hidden" name="userId" value={userId} />
                 <input type="hidden" name="pathName" value={pathName} />
@@ -72,6 +87,17 @@ export function ListingCard({
           <span className="font-medium text-black"> ${price} </span> / Night
         </p>
       </Link>
+
+      {showActions && (
+        <div className="flex space-x-2 mt-2">
+          <Link href={`/my-listings/edit/${homeId}`}>
+            <Button variant="default" size="sm">Edit</Button>
+          </Link>
+          <Button variant="destructive" size="sm" onClick={handleDelete}>
+            Delete
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

@@ -4,8 +4,9 @@ import { redirect } from "next/navigation";
 import { NoItems } from "../components/NoItem";
 import { ListingCard } from "../components/ListingCard";
 
-async function getData(userId: string) {
-  const data = await prisma.home.findMany({
+// Fetch listings for the logged-in user on the server
+async function fetchData(userId: string) {
+  return prisma.home.findMany({
     where: {
       userId: userId,
       addedCategory: true,
@@ -28,42 +29,42 @@ async function getData(userId: string) {
       createdAt: "desc",
     },
   });
-  return data;
 }
 
 export default async function MyListings() {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+  const session = await getKindeServerSession();
+  const user = await session.getUser();
 
   if (!user) {
     return redirect("/");
   }
 
-  const data = await getData(user.id);
+  const listings = await fetchData(user.id);
 
   return (
     <section className="container mx-auto px-5 lg:px-10 mt-10">
       <h2 className="text-3xl font-semibold tracking-tight"> Your Listings </h2>
 
-      {data.length === 0 ? (
+      {listings.length === 0 ? (
         <NoItems
           description="Please list a home to get started."
           title="You don't have any listings."
         />
       ) : (
         <div className="grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 grid-cols-1 gap-8 mt-8">
-          {data.map((item) => (
+          {listings.map((item) => (
             <ListingCard
               key={item.id}
-              imagePath={item.photo as string}
+              imagePath={item.photo ?? ""}
               homeId={item.id}
-              price={item.price as number}
-              description={item.description as string}
-              location={item.country as string}
+              price={item.price ?? 0}
+              description={item.description ?? ""}
+              location={item.country ?? ""}
               userId={user.id}
               pathName="/my-listings"
-              favoriteId={item.Favorite[0]?.id}
-              isInFavoriteList={item.Favorite.length > 0 ? true : false}
+              favoriteId={item.Favorite[0]?.id ?? ""}
+              isInFavoriteList={item.Favorite.length > 0}
+              showActions={true} // Edit/Delete Button
             />
           ))}
         </div>

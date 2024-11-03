@@ -16,19 +16,15 @@ datasource db {
 
 // Can either use this for default or the Kinde ID as the DB ID
 
-// model User {
-//   id String @id @default(uuid())
-// }
-
 model User {
   id String @id @unique
 
   email        String
   firstName    String
   lastName     String
-  password     String // Password (hashed)
+  password     String? // Password (fixa hash)
   isAdmin      Boolean    @default(false)
-  profileImage String? // Optional
+  profileImage String?
   Home         Home[]
   Favorite     Favorite[]
   Booking      Booking[]
@@ -54,7 +50,7 @@ model Home {
   addedCategory    Boolean @default(false)
   addedDescription Boolean @default(false)
   addedLocation    Boolean @default(false)
-  availability     Boolean @default(true) // Availability for bookings
+  availability     Boolean @default(true) // Bokningar
 
   createdAt DateTime @default(now())
   User      User?    @relation(fields: [userId], references: [id])
@@ -78,13 +74,13 @@ model Booking {
 
   startDate  DateTime
   endDate    DateTime
-  totalPrice Int // Total price calculated based on nights
-  status     String   @default("pending") // Pending, accepted, or rejected
+  totalPrice Int? // 
+  status     String   @default("pending") // Pending, Accepted, Rejected
   createdAt  DateTime @default(now())
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
-  Home   Home?   @relation(fields: [homeId], references: [id])
+  Home   Home?   @relation(fields: [homeId], references: [id], onDelete: Cascade)
   homeId String?
 }
 
