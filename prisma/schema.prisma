@@ -26,6 +26,8 @@ model User {
   email        String
   firstName    String
   lastName     String
+  password     String // Password (hashed)
+  isAdmin      Boolean    @default(false)
   profileImage String? // Optional
   Home         Home[]
   Favorite     Favorite[]
@@ -36,8 +38,7 @@ model User {
 
 // uuid is a function that generates a unique identifier, dont have to worry about it
 model Home {
-  id String @id @default(uuid())
-
+  id           String     @id @default(uuid())
   title        String?
   description  String?
   guests       String?
@@ -53,6 +54,7 @@ model Home {
   addedCategory    Boolean @default(false)
   addedDescription Boolean @default(false)
   addedLocation    Boolean @default(false)
+  availability     Boolean @default(true) // Availability for bookings
 
   createdAt DateTime @default(now())
   User      User?    @relation(fields: [userId], references: [id])
@@ -74,9 +76,11 @@ model Favorite {
 model Booking {
   id String @id @default(uuid())
 
-  startDate DateTime
-  endDate   DateTime
-  createdAt DateTime @default(now())
+  startDate  DateTime
+  endDate    DateTime
+  totalPrice Int // Total price calculated based on nights
+  status     String   @default("pending") // Pending, accepted, or rejected
+  createdAt  DateTime @default(now())
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String?
