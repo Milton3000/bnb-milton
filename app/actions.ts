@@ -163,6 +163,10 @@ export async function deleteFromFavorite(formData: FormData) {
 // Create booking with totalPrice calculation
 export async function createBooking(formData: FormData) {
   const userId = formData.get("userId") as string;
+  if (!userId) {
+    throw new Error("User must be logged in to create a booking.");
+  }
+
   const homeId = formData.get("homeId") as string;
   const startDate = new Date(formData.get("startDate") as string);
   const endDate = new Date(formData.get("endDate") as string);
@@ -195,6 +199,7 @@ export async function createBooking(formData: FormData) {
 }
 
 // Update property (restricted to owner or admin)
+// Update property (restricted to owner or admin)
 export async function updateProperty(
   homeId: string,
   userId: string | undefined,
@@ -206,7 +211,13 @@ export async function updateProperty(
 
   const home = await prisma.home.findUnique({ where: { id: homeId } });
 
-  if (!home || (home.userId !== userId && !(await isAdmin(userId)))) {
+  if (!home) {
+    throw new Error("Property not found.");
+  }
+
+  // Check if the user is the owner or an admin
+  const isOwnerOrAdmin = home.userId === userId || (await isAdmin(userId));
+  if (!isOwnerOrAdmin) {
     throw new Error("Not authorized to update this property.");
   }
 
@@ -217,21 +228,33 @@ export async function updateProperty(
 }
 
 // Delete property (restricted to owner or admin)
-export async function deleteProperty(homeId: string) {
-  try {
-    // check homeId is passed correctly
-    if (!homeId) throw new Error("Home ID is required to delete a property.");
-
-    await prisma.home.delete({
-      where: { id: homeId },
-    });
-  } catch (error) {
-    console.error("Failed to delete property:", error);
-    throw error;
+export async function deleteProperty(homeId: string, userId: string) {
+  if (!homeId || !userId) {
+    throw new Error("Home ID and User ID are required to delete a property.");
   }
+
+  const home = await prisma.home.findUnique({
+    where: { id: homeId },
+    select: { userId: true },
+  });
+
+  if (!home) {
+    throw new Error("Property not found.");
+  }
+
+  // Check if the user is the owner or an admin
+  const isOwnerOrAdmin = home.userId === userId || (await isAdmin(userId));
+  if (!isOwnerOrAdmin) {
+    throw new Error("Not authorized to delete this property.");
+  }
+
+  await prisma.home.delete({
+    where: { id: homeId },
+  });
 }
 
-// Approve or reject booking (restricted to listing owner)
+
+// Approve or reject booking (restricted to listing owner) -- SKIPPA DENNA, BEHÖVS INTE (2 VG krav)
 export async function approveOrRejectBooking(
   bookingId: string,
   action: "accept" | "reject"

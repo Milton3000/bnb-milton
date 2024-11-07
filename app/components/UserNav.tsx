@@ -7,29 +7,56 @@ import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import Link from "next/link";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
 import { createHome } from "../actions";
+import jwt from "jsonwebtoken";
+import prisma from "../lib/db";
+import { cookies } from "next/headers";
+import { JWTLogoutButton } from "./JWTLogoutButton";
 
 export async function UserNav() {
-
     const { getUser } = getKindeServerSession();
-    const user = await getUser();
+    let user = await getUser();
+    let isJWTSession = false;
 
-    // Linking this with submit / action because it expects a user id.
-    const createHomeWithId = createHome.bind(null, { userId: user?.id });
+    if (!user) {
+        const token = cookies().get("token")?.value;
+
+        if (token) {
+            try {
+                const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+                const userId = (decoded as { userId: string }).userId;
+                user = await prisma.user.findUnique({
+                    where: { id: userId },
+                    select: {
+                        id: true,
+                        firstName: true,
+                        lastName: true,
+                        profileImage: true,
+                    },
+                });
+                isJWTSession = !!user;
+            } catch (error) {
+                console.error("JWT verification failed:", error);
+            }
+        }
+    }
+
+    const userImage = user?.picture ?? user?.profileImage ?? DefaultUser;
+
+    const createHomeWithId = user ? createHome.bind(null, { userId: user.id }) : null;
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger>
                 <div className="rounded-full border px-2 py-2 lg:px-4 lg:py-2 flex items-center gap-x-3">
                     <MenuIcon className="w-6 h-6 lg:w-5 lg:h-5" />
-
-                    <Image src={user?.picture ?? DefaultUser} alt="User" width={32} height={32} className="w-8 h-8 rounded-full hidden lg:block" />
+                    <Image src={userImage} alt="User" width={32} height={32} className="w-8 h-8 rounded-full hidden lg:block" />
                 </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[200px]">
                 {user ? (
                     <>
                         <DropdownMenuItem>
-                            <form action={createHomeWithId} className="w-full">
+                            <form action={createHomeWithId!} className="w-full">
                                 <button type="submit" className="w-full text-start">
                                     List Your Home
                                 </button>
@@ -52,26 +79,40 @@ export async function UserNav() {
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
-                            <LogoutLink className="w-full">
-                                Logout
-                            </LogoutLink>
+                            {isJWTSession ? (
+                                <JWTLogoutButton /> // Render JWTLogoutButton if logged in with JWT
+                            ) : (
+                                <LogoutLink className="w-full">
+                                    Logout
+                                </LogoutLink>
+                            )}
                         </DropdownMenuItem>
                     </>
                 ) : (
                     <>
                         <DropdownMenuItem>
+                            <Link href="/custom-register" className="w-full">
+                                Register (JWT)
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                            <Link href="/custom-login" className="w-full">
+                                Login (JWT)
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
                             <RegisterLink className="w-full">
-                                Register
+                                Register (Kinde)
                             </RegisterLink>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <LoginLink className="w-full">
-                                Login
+                                Login (Kinde)
                             </LoginLink>
                         </DropdownMenuItem>
                     </>
                 )}
             </DropdownMenuContent>
         </DropdownMenu>
-    )
+    );
 }

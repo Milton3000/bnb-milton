@@ -17,12 +17,12 @@ datasource db {
 // Can either use this for default or the Kinde ID as the DB ID
 
 model User {
-  id String @id @unique
+  id String @id @default(uuid())
 
-  email        String
+  email        String     @unique
   firstName    String
   lastName     String
-  password     String? // Password (fixa hash)
+  password     String?
   isAdmin      Boolean    @default(false)
   profileImage String?
   Home         Home[]
@@ -75,7 +75,7 @@ model Booking {
   startDate  DateTime
   endDate    DateTime
   totalPrice Int? // 
-  status     String   @default("pending") // Pending, Accepted, Rejected
+  status     String   @default("pending") // Pending, Accepted, Rejected - Behöver ej?
   createdAt  DateTime @default(now())
 
   User   User?   @relation(fields: [userId], references: [id])

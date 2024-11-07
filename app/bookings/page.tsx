@@ -10,12 +10,14 @@ async function getData(userId: string) {
     where: {
       userId: userId,
       Home: {
-        // Only fetch bookings with a valid Home relationship
         isNot: null,
       },
     },
     select: {
       id: true,
+      totalPrice: true,
+      startDate: true, // Include startDate
+      endDate: true,   // Include endDate
       Home: {
         select: {
           id: true,
@@ -68,13 +70,17 @@ export default async function BookingsRoute() {
                 imagePath={item.Home?.photo ?? ""}
                 price={item.Home?.price ?? 0}
                 userId={user.id}
-                favoriteId={item.Home?.Favorite?.[0]?.id ?? ""} // optional chaining
+                favoriteId={item.Home?.Favorite?.[0]?.id ?? ""}
                 isInFavoriteList={
-                  (item.Home?.Favorite && item.Home.Favorite.length > 0) ??
-                  false
-                } // Check if Favorite exists and has length
+                  (item.Home?.Favorite && item.Home.Favorite.length > 0) ?? false
+                }
                 pathName="/bookings"
               />
+              {/* Display total price and booking dates */}
+              <div className="mt-2 text-lg font-medium text-gray-800">
+                <p>Total Price: ${item.totalPrice}</p>
+                <p>Dates: {new Date(item.startDate).toLocaleDateString()} - {new Date(item.endDate).toLocaleDateString()}</p>
+              </div>
               <CancelBookingButton bookingId={item.id} />
             </div>
           ))}
