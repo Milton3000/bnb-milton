@@ -16,7 +16,7 @@ export async function UserNav() {
     const { getUser } = getKindeServerSession();
     let user = await getUser();
     let isJWTSession = false;
-    // let isAdmin = false;
+    let isAdmin = false;
 
     if (!user) {
         const token = cookies().get("token")?.value;
@@ -25,7 +25,7 @@ export async function UserNav() {
             try {
                 const decoded = jwt.verify(token, process.env.JWT_SECRET!);
                 const userId = (decoded as { userId: string }).userId;
-                user = await prisma.user.findUnique({
+                const jwtUser = await prisma.user.findUnique({
                     where: { id: userId },
                     select: {
                         id: true,
@@ -35,15 +35,19 @@ export async function UserNav() {
                         isAdmin: true,
                     },
                 });
-                isJWTSession = !!user;
-                isAdmin = user?.isAdmin ?? false;
+
+                if (jwtUser) {
+                    user = jwtUser;  // Assign the retrieved user object
+                    isJWTSession = true;
+                    isAdmin = jwtUser.isAdmin;
+                }
             } catch (error) {
                 console.error("JWT verification failed:", error);
             }
         }
     }
 
-    const userImage = user?.picture ?? user?.profileImage ?? DefaultUser;
+    const userImage = user?.profileImage ?? DefaultUser;
     const createHomeWithId = user ? createHome.bind(null, { userId: user.id }) : null;
 
     return (
