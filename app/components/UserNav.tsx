@@ -13,20 +13,30 @@ import prisma from "../lib/db";
 import { cookies } from "next/headers";
 import { JWTLogoutButton } from "./JWTLogoutButton";
 
+interface JWTUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  profileImage: string | null;
+  isAdmin: boolean;
+}
+
 export async function UserNav() {
     const { getUser } = getKindeServerSession();
-    let user = await getUser();
+    const kindeUser = await getUser(); 
+    let jwtUser: JWTUser | null = null;
     let isJWTSession = false;
     let isAdmin = false;
 
-    if (!user) {
+    if (!kindeUser) {
         const token = cookies().get("token")?.value;
 
         if (token) {
             try {
-                const decoded = jwt.verify(token, process.env.JWT_SECRET!);
-                const userId = (decoded as { userId: string }).userId;
-                const jwtUser = await prisma.user.findUnique({
+                const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string };
+                const userId = decoded.userId;
+                
+                jwtUser = await prisma.user.findUnique({
                     where: { id: userId },
                     select: {
                         id: true,
@@ -38,7 +48,6 @@ export async function UserNav() {
                 });
 
                 if (jwtUser) {
-                    user = jwtUser;  // Assign the retrieved user object
                     isJWTSession = true;
                     isAdmin = jwtUser.isAdmin;
                 }
@@ -48,8 +57,9 @@ export async function UserNav() {
         }
     }
 
-    const userImage = user?.profileImage ?? DefaultUser;
-    const createHomeWithId = user ? createHome.bind(null, { userId: user.id }) : null;
+    // Determine the user image depending on session type
+    const userImage = jwtUser?.profileImage || kindeUser?.picture || DefaultUser;
+    const createHomeWithId = jwtUser ? createHome.bind(null, { userId: jwtUser.id }) : null;
 
     return (
         <DropdownMenu>
@@ -60,7 +70,7 @@ export async function UserNav() {
                 </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[200px]">
-                {user ? (
+                {jwtUser || kindeUser ? (
                     <>
                         <DropdownMenuItem>
                             <form action={createHomeWithId!} className="w-full">
