@@ -3,9 +3,16 @@
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 
-import { DateRange } from "react-date-range";
+import { DateRange, RangeKeyDict } from "react-date-range";
 import { useState } from "react";
 import { eachDayOfInterval } from "date-fns";
+
+// Define a specific type for the date range selection
+interface DateRangeSelection {
+  startDate: Date;
+  endDate: Date;
+  key: string;
+}
 
 export function SelectCalendar({
   booking,
@@ -17,13 +24,15 @@ export function SelectCalendar({
       }[]
     | undefined;
 }) {
-  const [state, setState] = useState([
+  // Initialize state with a correct type and defined `key`
+  const [state, setState] = useState<DateRangeSelection[]>([
     {
       startDate: new Date(),
       endDate: new Date(),
       key: "selection",
     },
   ]);
+
   let disabledDates: Date[] = [];
   booking?.forEach((bookingItem) => {
     const dateRange = eachDayOfInterval({
@@ -51,7 +60,15 @@ export function SelectCalendar({
         showDateDisplay={false}
         rangeColors={["#F97316"]}
         ranges={state}
-        onChange={(item) => setState([item.selection])}
+        onChange={(item: RangeKeyDict) =>
+          setState([
+            {
+              startDate: item.selection?.startDate || new Date(),
+              endDate: item.selection?.endDate || new Date(),
+              key: "selection",
+            },
+          ])
+        }
         minDate={new Date()}
         direction="vertical"
         disabledDates={disabledDates}
