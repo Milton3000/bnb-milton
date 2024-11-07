@@ -39,12 +39,13 @@ export function ListingCard({
 
   const handleDelete = async () => {
     try {
-      await deleteProperty(homeId);
+      await deleteProperty(homeId, userId); // Pass both homeId and userId here
       router.refresh();
     } catch (error) {
       console.error("Failed to delete property:", error);
     }
   };
+  
 
   return (
     <div className="flex flex-col">
