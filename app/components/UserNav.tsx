@@ -16,7 +16,7 @@ export async function UserNav() {
     const { getUser } = getKindeServerSession();
     let user = await getUser();
     let isJWTSession = false;
-    let isAdmin = false;
+    // let isAdmin = false;
 
     if (!user) {
         const token = cookies().get("token")?.value;
@@ -32,11 +32,11 @@ export async function UserNav() {
                         firstName: true,
                         lastName: true,
                         profileImage: true,
-                        isAdmin: true, // Fetch isAdmin status
+                        isAdmin: true,
                     },
                 });
                 isJWTSession = !!user;
-                isAdmin = user?.isAdmin ?? false; // Set isAdmin
+                isAdmin = user?.isAdmin ?? false;
             } catch (error) {
                 console.error("JWT verification failed:", error);
             }

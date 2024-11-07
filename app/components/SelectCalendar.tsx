@@ -51,7 +51,7 @@ export function SelectCalendar({
         showDateDisplay={false}
         rangeColors={["#F97316"]}
         ranges={state}
-        onChange={(item) => setState([item.selection] as any)}
+        onChange={(item) => setState([item.selection])}
         minDate={new Date()}
         direction="vertical"
         disabledDates={disabledDates}
