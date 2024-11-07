@@ -1,4 +1,4 @@
-"use client"; // This component uses client-side functionality
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -19,6 +19,7 @@ interface iAppProps {
   homeId: string;
   pathName: string;
   showActions?: boolean;
+  isAdmin?: boolean;
 }
 
 export function ListingCard({
@@ -32,6 +33,7 @@ export function ListingCard({
   isInFavoriteList,
   pathName,
   showActions = false,
+  isAdmin = false,
 }: iAppProps) {
   const { getCountryByValue } = useCountries();
   const country = getCountryByValue(location);
@@ -39,22 +41,21 @@ export function ListingCard({
 
   const handleDelete = async () => {
     try {
-      await deleteProperty(homeId, userId); // Pass both homeId and userId here
+      await deleteProperty(homeId, userId);
       router.refresh();
     } catch (error) {
       console.error("Failed to delete property:", error);
     }
   };
-  
 
   return (
-    <div className="flex flex-col">
-      <div className="relative h-72">
+    <div className="flex flex-col h-full justify-between">
+      <div className="relative h-72 mb-4">
         <Image
           src={`https://sctnymoriaxapkrjnbfc.supabase.co/storage/v1/object/public/images/${imagePath}`}
           alt="Image of Property"
           fill
-          className="rounded-lg height-full object-cover"
+          className="rounded-lg object-cover"
         />
         {userId && (
           <div className="z-10 absolute top-2 right-2">
@@ -77,28 +78,41 @@ export function ListingCard({
         )}
       </div>
 
-      <Link href={`/home/${homeId}`} className="mt-2">
-        <h3 className="font-medium text-base">
-          {country?.flag} {country?.label} / {country?.region}
-        </h3>
-        <p className="text-muted-foreground text-sm line-clamp-2">
-          {description}
-        </p>
-        <p className="pt-2 text-muted-foreground">
-          <span className="font-medium text-black"> ${price} </span> / Night
+      <Link href={`/home/${homeId}`} className="flex-grow flex flex-col justify-between">
+        <div>
+          <h3 className="font-medium text-base">
+            {country?.flag} {country?.label} / {country?.region}
+          </h3>
+          <p className="text-muted-foreground text-sm line-clamp-2 mb-2">
+            {description}
+          </p>
+        </div>
+        <p className="font-semibold text-black text-lg mt-2">
+          ${price} <span className="text-sm text-muted-foreground">/ Night</span>
         </p>
       </Link>
 
-      {showActions && (
-        <div className="flex space-x-2 mt-2">
-          <Link href={`/my-listings/edit/${homeId}`}>
-            <Button variant="default" size="sm">Edit</Button>
-          </Link>
-          <Button variant="destructive" size="sm" onClick={handleDelete}>
-            Delete
-          </Button>
-        </div>
-      )}
+      {/* Button Section */}
+      <div className="flex justify-between items-center mt-4">
+        {showActions && (
+          <div className="flex space-x-2">
+            <Link href={`/my-listings/edit/${homeId}`}>
+              <Button variant="default" size="sm">Edit</Button>
+            </Link>
+            <Button variant="destructive" size="sm" onClick={handleDelete}>
+              Delete
+            </Button>
+          </div>
+        )}
+
+        {!showActions && isAdmin && (
+          <div className="flex justify-end">
+            <Button variant="destructive" size="sm" onClick={handleDelete}>
+              Delete
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

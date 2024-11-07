@@ -16,8 +16,8 @@ async function getData(userId: string) {
     select: {
       id: true,
       totalPrice: true,
-      startDate: true, // Include startDate
-      endDate: true,   // Include endDate
+      startDate: true,
+      endDate: true,
       Home: {
         select: {
           id: true,

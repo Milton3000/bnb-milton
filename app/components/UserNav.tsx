@@ -16,6 +16,7 @@ export async function UserNav() {
     const { getUser } = getKindeServerSession();
     let user = await getUser();
     let isJWTSession = false;
+    let isAdmin = false;
 
     if (!user) {
         const token = cookies().get("token")?.value;
@@ -31,9 +32,11 @@ export async function UserNav() {
                         firstName: true,
                         lastName: true,
                         profileImage: true,
+                        isAdmin: true, // Fetch isAdmin status
                     },
                 });
                 isJWTSession = !!user;
+                isAdmin = user?.isAdmin ?? false; // Set isAdmin
             } catch (error) {
                 console.error("JWT verification failed:", error);
             }
@@ -41,7 +44,6 @@ export async function UserNav() {
     }
 
     const userImage = user?.picture ?? user?.profileImage ?? DefaultUser;
-
     const createHomeWithId = user ? createHome.bind(null, { userId: user.id }) : null;
 
     return (
@@ -80,7 +82,7 @@ export async function UserNav() {
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
                             {isJWTSession ? (
-                                <JWTLogoutButton /> // Render JWTLogoutButton if logged in with JWT
+                                <JWTLogoutButton />
                             ) : (
                                 <LogoutLink className="w-full">
                                     Logout

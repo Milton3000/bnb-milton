@@ -64,7 +64,7 @@ export default async function MyListings() {
               pathName="/my-listings"
               favoriteId={item.Favorite[0]?.id ?? ""}
               isInFavoriteList={item.Favorite.length > 0}
-              showActions={true} // Edit/Delete Button
+              showActions={true}
             />
           ))}
         </div>

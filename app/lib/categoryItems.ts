@@ -96,14 +96,6 @@ interface iAppProps {
         "https://a0.muscache.com/pictures/6ad4bd95-f086-437d-97e3-14d12155ddfe.jpg",
     },
     {
-      id: 11,
-      name: "omg",
-      description: "This Property has a wow factor",
-      title: "WOW!",
-      imageUrl:
-        "https://a0.muscache.com/pictures/c5a4f6fc-c92c-4ae8-87dd-57f1ff1b89a6.jpg",
-    },
-    {
       id: 12,
       name: "surfing",
       description: "This Property is located near to a surfing spot",

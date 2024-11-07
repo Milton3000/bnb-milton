@@ -8,6 +8,9 @@ async function getData(userId: string) {
   const data = await prisma.favorite.findMany({
     where: {
       userId: userId,
+      Home: {
+        isNot: null,  // Ensures only existing homes are selected
+      },
     },
     select: {
       Home: {
@@ -23,8 +26,9 @@ async function getData(userId: string) {
     },
   });
 
-  return data;
+  return data.filter((item) => item.Home !== null);
 }
+
 
 export default async function FavoriteRoute() {
   const { getUser } = getKindeServerSession();
