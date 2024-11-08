@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Heart, Loader2 } from "lucide-react";
-// If we use State in any form, we have to mark it as "use client" with Next.js
 import { useFormStatus } from "react-dom";
 
 export function SubmitButton() {

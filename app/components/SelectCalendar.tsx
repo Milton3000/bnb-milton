@@ -1,13 +1,13 @@
 "use client";
 
-import "react-date-range/dist/styles.css"; // main css file
-import "react-date-range/dist/theme/default.css"; // theme css file
+import "react-date-range/dist/styles.css"; 
+import "react-date-range/dist/theme/default.css";
 
 import { DateRange, RangeKeyDict } from "react-date-range";
 import { useState } from "react";
 import { eachDayOfInterval } from "date-fns";
 
-// Define a specific type for the date range selection
+// Define a specific type for the date range selection (prev error)
 interface DateRangeSelection {
   startDate: Date;
   endDate: Date;

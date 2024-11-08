@@ -33,9 +33,9 @@ export default async function EditListingPage({ params }: Props) {
     <UpdateListingForm
       listing={{
         id: listing.id,
-        title: listing.title || "", // Default to empty string if null
-        description: listing.description || "", // Default to empty string if null
-        price: listing.price ?? 0, // Default to 0 if null
+        title: listing.title || "", 
+        description: listing.description || "", 
+        price: listing.price ?? 0, 
       }}
       userId={user.id}
     />

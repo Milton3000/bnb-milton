@@ -7,9 +7,6 @@ import { supabase } from "./lib/supabase";
 import { revalidatePath } from "next/cache";
 import { differenceInDays } from "date-fns";
 
-// Server environment "use server"
-// File for the server actions, from Next.Js 13.4
-
 // Check for existing homes and create if none exists.
 export async function createHome({ userId }: { userId: string }) {
   const data = await prisma.home.findFirst({
@@ -198,7 +195,6 @@ export async function createBooking(formData: FormData) {
   return redirect("/bookings");
 }
 
-// Update property (restricted to owner or admin)
 // Update property (restricted to owner or admin)
 export async function updateProperty(
   homeId: string,
