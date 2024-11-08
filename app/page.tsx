@@ -38,7 +38,7 @@ async function getData({
       description: true,
       country: true,
       Favorite: {
-        where: { userId: userId ?? undefined }, 
+        where: { userId: userId ?? undefined },
       },
     },
   });
@@ -56,11 +56,13 @@ export default async function Home({
   };
 }) {
   const { getUser } = getKindeServerSession();
-  let user = await getUser();
+  const kindeUser = await getUser();
+
+  let user = kindeUser ? { id: kindeUser.id } : null;
+  let isAdmin = false;
 
   // Check for JWT token to determine if this is the admin user
   const token = cookies().get("token")?.value;
-  let isAdmin = false;
 
   if (token) {
     try {
@@ -74,7 +76,7 @@ export default async function Home({
       });
 
       isAdmin = jwtUser?.isAdmin ?? false;
-      user = { id: userId, ...user };
+      user = { id: userId };
     } catch (error) {
       console.error("JWT verification failed:", error);
     }
@@ -112,7 +114,10 @@ async function ShowItems({
   return (
     <>
       {data.length === 0 ? (
-        <NoItems description="Please check other categories or create your own listing." title="No listings found for this category."/>
+        <NoItems
+          description="Please check other categories or create your own listing."
+          title="No listings found for this category."
+        />
       ) : (
         <div className="grid lg:grid-cols-4 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-8">
           {data.map((item) => (
@@ -122,9 +127,9 @@ async function ShowItems({
               imagePath={item.photo as string}
               location={item.country as string}
               price={item.price as number}
-              userId={user?.id}
-              favoriteId={item.Favorite[0]?.id ?? ""} 
-              isInFavoriteList={item.Favorite.length > 0} 
+              userId={user?.id ?? ""}
+              favoriteId={item.Favorite[0]?.id ?? ""}
+              isInFavoriteList={item.Favorite.length > 0}
               homeId={item.id}
               pathName="/"
               isAdmin={isAdmin}
