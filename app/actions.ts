@@ -176,7 +176,7 @@ interface UpdatePropertyData {
   title: string;
   description: string;
   price: number;
-  image?: File | null; // New image to upload, optional
+  image?: File | null; // Upload, optional
   photo?: string | null; // Existing photo path to delete if updated
 }
 
@@ -206,7 +206,7 @@ export async function updateProperty(
 
   // If a new image is provided, delete the old one and upload the new one
   if (data.image) {
-    // Delete the old image from Supabase if it exists
+    // Delete the old image from Supabase if it exists ( NOT WORKING AT THE MOMENT )
     if (data.photo) {
       const { error: deleteError } = await supabase.storage.from("images").remove([data.photo]);
       if (deleteError) {
@@ -227,17 +227,17 @@ export async function updateProperty(
       throw uploadError;
     }
 
-    newImagePath = uploadData?.path || undefined; // Update image path with new upload result
+    newImagePath = uploadData?.path || undefined;
   }
 
-  // Update the property in the database, including the new image path if updated
+
   return prisma.home.update({
     where: { id: homeId },
     data: {
       title: data.title,
       description: data.description,
       price: data.price,
-      photo: newImagePath, // Update with the new or existing image path
+      photo: newImagePath,
     },
   });
 }

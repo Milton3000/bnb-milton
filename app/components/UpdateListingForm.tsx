@@ -21,7 +21,7 @@ export function UpdateListingForm({ listing, userId }: UpdateListingFormProps) {
   const [title, setTitle] = useState(listing.title);
   const [description, setDescription] = useState(listing.description);
   const [price, setPrice] = useState(listing.price);
-  const [image, setImage] = useState<File | null>(null); // New state for image file
+  const [image, setImage] = useState<File | null>(null);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
