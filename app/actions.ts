@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
 import { redirect } from "next/navigation";
@@ -6,6 +7,9 @@ import prisma from "./lib/db";
 import { supabase } from "./lib/supabase";
 import { revalidatePath } from "next/cache";
 import { differenceInDays } from "date-fns";
+
+// Base URL for redirecting in production
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 // Check for existing homes and create if none exists.
 export async function createHome({ userId }: { userId: string }) {
@@ -20,37 +24,21 @@ export async function createHome({ userId }: { userId: string }) {
 
   // If no home exists, create a new one.
   if (data === null) {
-    const data = await prisma.home.create({
-      data: {
-        userId: userId,
-      },
+    const newHome = await prisma.home.create({
+      data: { userId: userId },
     });
-    return redirect(`/create/${data.id}/structure`);
-  } else if (
-    !data.addedCategory &&
-    !data.addedDescription &&
-    !data.addedLocation
-  ) {
-    return redirect(`/create/${data.id}/structure`);
+    return redirect(`${baseUrl}/create/${newHome.id}/structure`);
+  } else if (!data.addedCategory && !data.addedDescription && !data.addedLocation) {
+    return redirect(`${baseUrl}/create/${data.id}/structure`);
   } else if (data.addedCategory && !data.addedDescription) {
-    return redirect(`/create/${data.id}/description`);
-  } else if (
-    data.addedCategory &&
-    data.addedDescription &&
-    !data.addedLocation
-  ) {
-    return redirect(`/create/${data.id}/address`);
-  } else if (
-    data.addedCategory &&
-    data.addedDescription &&
-    data.addedLocation
-  ) {
-    const data = await prisma.home.create({
-      data: {
-        userId: userId,
-      },
+    return redirect(`${baseUrl}/create/${data.id}/description`);
+  } else if (data.addedCategory && data.addedDescription && !data.addedLocation) {
+    return redirect(`${baseUrl}/create/${data.id}/address`);
+  } else if (data.addedCategory && data.addedDescription && data.addedLocation) {
+    const newHome = await prisma.home.create({
+      data: { userId: userId },
     });
-    return redirect(`/create/${data.id}/structure`);
+    return redirect(`${baseUrl}/create/${newHome.id}/structure`);
   }
 }
 
@@ -59,16 +47,11 @@ export async function createCategoryPage(formData: FormData) {
   const homeId = formData.get("homeId") as string;
 
   const data = await prisma.home.update({
-    where: {
-      id: homeId,
-    },
-    data: {
-      categoryName: categoryName,
-      addedCategory: true,
-    },
+    where: { id: homeId },
+    data: { categoryName: categoryName, addedCategory: true },
   });
 
-  return redirect(`/create/${homeId}/description`);
+  return redirect(`${baseUrl}/create/${homeId}/description`);
 }
 
 export async function createDescriptionPage(formData: FormData) {
@@ -90,9 +73,7 @@ export async function createDescriptionPage(formData: FormData) {
     });
 
   const data = await prisma.home.update({
-    where: {
-      id: homeId,
-    },
+    where: { id: homeId },
     data: {
       title: title,
       description: description,
@@ -105,7 +86,7 @@ export async function createDescriptionPage(formData: FormData) {
     },
   });
 
-  return redirect(`/create/${homeId}/address`);
+  return redirect(`${baseUrl}/create/${homeId}/address`);
 }
 
 export async function createLocation(formData: FormData) {
@@ -113,17 +94,13 @@ export async function createLocation(formData: FormData) {
   const countryValue = formData.get("countryValue") as string;
 
   const data = await prisma.home.update({
-    where: {
-      id: homeId,
-    },
-    data: {
-      country: countryValue,
-      addedLocation: true,
-    },
+    where: { id: homeId },
+    data: { country: countryValue, addedLocation: true },
   });
 
-  return redirect("/");
+  return redirect(baseUrl);
 }
+
 
 // Add to favorites
 export async function addToFavorite(formData: FormData) {

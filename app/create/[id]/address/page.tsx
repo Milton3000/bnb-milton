@@ -1,5 +1,4 @@
 "use client";
-
 import { createLocation } from "@/app/actions";
 import { BottomBar } from "@/app/components/BottomBar";
 import { useCountries } from "@/app/lib/getCountries";
