@@ -6,6 +6,7 @@ import { NoItems } from "./components/NoItem";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import {unstable_noStore as noStore} from "next/cache";
 
 async function getData({
   searchParams,
@@ -20,6 +21,7 @@ async function getData({
     bathroom?: string;
   };
 }) {
+  noStore();
   return await prisma.home.findMany({
     where: {
       addedCategory: true,

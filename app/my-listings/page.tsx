@@ -3,9 +3,11 @@ import prisma from "../lib/db";
 import { redirect } from "next/navigation";
 import { NoItems } from "../components/NoItem";
 import { ListingCard } from "../components/ListingCard";
+import {unstable_noStore as noStore} from "next/cache";
 
 // Fetch listings for the logged-in user on the server
 async function fetchData(userId: string) {
+  noStore();
   return prisma.home.findMany({
     where: {
       userId: userId,
