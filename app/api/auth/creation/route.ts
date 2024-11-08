@@ -28,11 +28,11 @@ export async function GET() {
                 lastName: user.family_name ?? "",
                 id: user.id,
                 profileImage: user.picture ?? `https://avatar.vercel.sh/${user.given_name}`,
-                password: "placeholder-password", // Provide a placeholder password
+                password: "placeholder-password",
             },
         });
         
     }
 
-    return NextResponse.redirect("http://localhost:3000");
+    return NextResponse.redirect("https://bnb-milton.vercel.app");
 }
