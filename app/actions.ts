@@ -172,10 +172,19 @@ export async function createBooking(formData: FormData) {
 }
 
 // Update property (restricted to owner or admin)
+interface UpdatePropertyData {
+  title: string;
+  description: string;
+  price: number;
+  image?: File | null; // New image to upload, optional
+  photo?: string | null; // Existing photo path to delete if updated
+}
+
+// Update property (restricted to owner or admin)
 export async function updateProperty(
   homeId: string,
   userId: string | undefined,
-  data: { title: string; description: string; price: number }
+  data: UpdatePropertyData,
 ) {
   if (!userId) {
     throw new Error("User ID is required to update a property.");
@@ -193,11 +202,46 @@ export async function updateProperty(
     throw new Error("Not authorized to update this property.");
   }
 
+  let newImagePath = data.photo; // Default to current image path if no new image is provided
+
+  // If a new image is provided, delete the old one and upload the new one
+  if (data.image) {
+    // Delete the old image from Supabase if it exists
+    if (data.photo) {
+      const { error: deleteError } = await supabase.storage.from("images").remove([data.photo]);
+      if (deleteError) {
+        console.error("Failed to delete old image:", deleteError);
+      }
+    }
+
+    // Upload the new image to Supabase
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from("images")
+      .upload(`${data.image.name}-${Date.now()}`, data.image, {
+        cacheControl: "2592000",
+        contentType: data.image.type,
+      });
+
+    if (uploadError) {
+      console.error("Failed to upload new image:", uploadError);
+      throw uploadError;
+    }
+
+    newImagePath = uploadData?.path || undefined; // Update image path with new upload result
+  }
+
+  // Update the property in the database, including the new image path if updated
   return prisma.home.update({
     where: { id: homeId },
-    data,
+    data: {
+      title: data.title,
+      description: data.description,
+      price: data.price,
+      photo: newImagePath, // Update with the new or existing image path
+    },
   });
 }
+
 
 // Delete property (restricted to owner or admin)
 export async function deleteProperty(homeId: string, userId: string) {
