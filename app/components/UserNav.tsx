@@ -57,9 +57,12 @@ export async function UserNav() {
         }
     }
 
+    // Determine the user ID based on session type
+    const userId = jwtUser?.id || kindeUser?.id || null;
+    const createHomeWithId = userId ? createHome.bind(null, { userId }) : null;
+
     // Determine the user image depending on session type
     const userImage = jwtUser?.profileImage || kindeUser?.picture || DefaultUser;
-    const createHomeWithId = jwtUser ? createHome.bind(null, { userId: jwtUser.id }) : null;
 
     return (
         <DropdownMenu>
