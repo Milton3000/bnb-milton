@@ -110,7 +110,7 @@ export async function UserNav() {
                     </>
                 ) : (
                     <>
-                        <DropdownMenuItem>
+                        {/* <DropdownMenuItem>
                             <Link href="/custom-register" className="w-full">
                                 Register (JWT)
                             </Link>
@@ -119,15 +119,15 @@ export async function UserNav() {
                             <Link href="/custom-login" className="w-full">
                                 Login (JWT)
                             </Link>
-                        </DropdownMenuItem>
+                        </DropdownMenuItem> */}
                         <DropdownMenuItem>
                             <RegisterLink className="w-full">
-                                Register (Kinde)
+                                Register 
                             </RegisterLink>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                             <LoginLink className="w-full">
-                                Login (Kinde)
+                                Login
                             </LoginLink>
                         </DropdownMenuItem>
                     </>

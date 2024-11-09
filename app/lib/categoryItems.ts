@@ -42,7 +42,7 @@ interface iAppProps {
     {
       id: 4,
       name: "luxury",
-      description: "This Property is considerd Luxorious",
+      description: "This Property is considerd Luxurious",
       title: "Luxury",
       imageUrl:
         "https://a0.muscache.com/pictures/c8e2ed05-c666-47b6-99fc-4cb6edcde6b4.jpg",
